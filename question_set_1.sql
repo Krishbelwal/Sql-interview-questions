@@ -141,3 +141,51 @@ FROM Transaction
 GROUP BY Region
 ORDER BY Total_Amount DESC
 LIMIT 1;
+
+
+-- 25 -  Calculate ARPU - 
+-- Table - Transaction_table
+-- col - Transaction_id , Amount , 
+
+select sum(Amount) / count(Transaction_id) As ARPU from Transaction;
+
+
+
+                                                        --   2nd pdf
+-- Find the department with lowest salary averages - 
+select dept_id , Avg(salary) As Avg_salary from Department Group by Department order by Avg_salary limit 1;
+
+-- Find the name whose names start and end with same letter  -- 
+select * from Employee where left(Name , 1) = Right (Name , 1);
+
+
+-- Running Total -- 
+-- Customer - Customer_id  , sale , Order_date
+
+select customer_id , order_date , sum(Amount) over(partition by customer_id order by order_date) As Running_total from Customer;
+
+
+
+
+-- 4 -  count emp in each dept having more then 5 emp-- 
+-- Table - Employee
+-- Col - Emp_id , Dept_name , 
+use car_sales;
+select * from carr_saless;
+
+select Dept_name , count(Emp_id) As Total_count from Employee group by Dept_name having Total_Count >= 5;
+
+
+
+
+
+-- 5 - find Emp who has joined in the last 6 months - 
+-- Emp_id , Join_date
+
+select Emp_id , join_date from Employee where join_date >= curdate() - interval 6 month;
+
+                               --   using joins-- 
+-- Employee - Emp_id 
+-- joinn - join_date , Emp_id
+
+select E.Emp_id , J.join_date from Employee E join Joinn J on E.Emp_id = J.Emp_id where J.join_date >= curdate() - interval 6 month;
