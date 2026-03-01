@@ -188,4 +188,70 @@ select Emp_id , join_date from Employee where join_date >= curdate() - interval 
 -- Employee - Emp_id 
 -- joinn - join_date , Emp_id
 
+
+-- Find the Employee without dept-- 
+-- Assume - Employee- Emp_id , Dept - Emp_id  , dept_id
+select E.* from Employee E left join Department D on E.EMp_id = D.dept_id where D.dept_id is null;
+
+
+                                   -- customers who made purchases but never returned
+-- Assume-- 
+-- Customer - customer_id , order - order_id , customer_id , Return - customer_id
+
+select C.customer_id , O.order_id from Customers join Orders on C.customer_id = O.customer_id where C.customer_id not in 
+(
+select C.customer_id from Returns
+);
+
+
+
+										-- show the count of order per customer-- 
+-- Assume - Customers - cust_id  , Orders - cust_id  , Order_id -- 
+select C.cust_id , count(O.order_id) As Total_counts from C Customers left join O Orders on E.cust_id = O.cust_id;
+
+
+									-- Reterve all the emp who joined in 2023-- 
+select Emp_id , join_date
+from Employee 
+where year(join_date) = 2023;
+                                                       -- Calculate the averge order value per customer-- 
+select Customer_id , avg(Amount) As Avg_order_value from Customer;
+
+							
+                                                  --   Get the latest order placed by each customer-- 
+select Customer_id , max(order_date) As Latest_order from orders group by customer_id;
+
+
+													-- Find those products who never sold
+                                                    
+-- Table - Customer - customer_id  , Product - product_id , customer_id , product_name
+select P.prodcut_id from Product P left join Customer C on P.product_id = C.product_id where C.product_id is null;
+
+
+													-- Identify the most selling product
+-- Table - Product - Product_id , Amount
+select Product_id , sum(Amount) As Total_sale from Product group by Product_id order by Total_sale Desc;
+
+         
+                                       --  count how many customers placed more than 5 orders-- 
+-- By joins--                                       
+-- Customer -  customer_id  , order_id
+-- Order - Order_id , Amount  
+                                            
+select C.Customer_id , count(O.Order_id) As Total_counts from Customer C join Orders O on C.customer_id = O.Order_id where Total_counts >= 5;
+
+-- By subquery-- 
+select * from 
+(
+select Customer_id from Orders group by Customer_id having count(*) >5
+);
+
+
+-- Reterive customers with Order above then averge order value-- 
+select Customer_id from Orders where Amount > 
+(
+select Avg(Amount) from Orders
+);
+
+
 select E.Emp_id , J.join_date from Employee E join Joinn J on E.Emp_id = J.Emp_id where J.join_date >= curdate() - interval 6 month;
